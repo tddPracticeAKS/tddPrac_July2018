@@ -1,36 +1,55 @@
 package in.tdd;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.IntBinaryOperator;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static in.tdd.OperatorFactory.getOperator;
+import static java.lang.String.valueOf;
 import static java.util.Arrays.stream;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
 public class StringCalculator {
 
+    private final String VALID_SEPARATORS = "[,|\n]";
+
     public int add(String numbers) {
-           return stream(validateInput(numbers).get().split("[,\n]"))
-                .filter(element -> !element.isEmpty())
-                .filter(element -> StringUtils.isNumeric(element))
-                .mapToInt(Integer::parseInt)
-                .reduce(OperatorFactory.getOperator("+")).getAsInt();
+        String delimiter = extractDelimiter(numbers).get();
+        Map<Boolean, List<Integer>> lists = stream(sanitize(numbers, delimiter).get().split(delimiter))
+                .filter(input -> !input.isEmpty())
+                .filter(NumberUtils::isNumber)
+                .map(Integer::parseInt)
+                .collect(Collectors.groupingBy(num -> num < 0));
+        validateNegativeInput(lists.get(true));
+        return sumOf(lists.get(false));
     }
 
-    private Optional<String> validateInput(String numbers) {
-        return Optional.of(ofNullable(numbers).orElse(numbers.contains(",\n") ? "0" : numbers));
+    private int sumOf(List<Integer> list) {
+        return ofNullable(list).orElseGet(() -> emptyList()).stream()
+                .mapToInt(Integer::intValue)
+                .reduce((x, y) -> x + y).orElse(0);
     }
 
-    public int operate(String numbers, String operator) {
-        IntBinaryOperator operation = getOperator(operator);
-        return stream(validateInput(numbers).orElse("0").split(","))
-                .filter(element -> !element.isEmpty())
-                .mapToInt(Integer::parseInt)
-                .reduce(operation)
-                .getAsInt();
+    private void validateNegativeInput(List<Integer> list) {
+        ofNullable(list).ifPresent(elements -> {
+            throw new IllegalArgumentException("Negative values : " + elements);
+        });
+    }
+
+    private Optional<String> extractDelimiter(String input) {
+        return of(ofNullable(input)
+                .filter(in -> in.startsWith("//"))
+                .map(in -> valueOf(input.charAt(2)))
+                .orElse(","));
+    }
+
+    private Optional<String> sanitize(String numbers, String delimiter) {
+        return of(ofNullable(numbers)
+                .map(input -> input.replaceAll(VALID_SEPARATORS, delimiter))
+                .filter(input -> !input.contains(",,"))
+                .orElseThrow(() -> new IllegalArgumentException()));
     }
 
 }
