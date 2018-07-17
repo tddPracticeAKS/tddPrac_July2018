@@ -66,6 +66,27 @@ public class StringCalculatorTest {
         assertEquals(21,sum);
     }
 
+    @DisplayName("Return sum 21 when input is multiple numbers 1,2,3,4,5\n6 and has newline")
+    @Test
+    public void returnSumWhenInputMultipleInputsAsListWithNewLine(){
+        StringCalculator stringCalculator = new StringCalculator();
+        int sum = stringCalculator.add("1,2,3,4,5\n6");
+        assertEquals(21,sum);
+    }
+
+    @DisplayName("Return sum 1 when input is multiple numbers 1,\n and has newline")
+    @Test
+    public void returnSumWhenInputMultipleInputsAsListWithNewLineAndDelimiter(){
+        StringCalculator stringCalculator = new StringCalculator();
+        assertEquals(0,stringCalculator.add("1,\n"));
+    }
+
+
+
+
+
+
+
     @DisplayName("Return 6 when input 2,3 and opertion multiply")
     @Test
     public void returnProductWhenInputMultipleInputsAsListAndOperationMul(){
