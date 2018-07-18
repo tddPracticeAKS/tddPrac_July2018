@@ -19,15 +19,14 @@ public class StringCalculator {
 
     public int add(String numbers) {
         String delimiter = extractDelimiter(numbers);
-        Map<Boolean, List<Integer>> lists = stream(sanitize(numbers, delimiter).split(delimiter))
+        Map<Boolean, List<String>> lists = stream(sanitize(numbers, delimiter).split(delimiter))
                 .filter(NumberUtils::isNumber)
-                .map(Integer::parseInt)
-                .collect(partitioningBy(num -> num < 0));
+                .collect(partitioningBy(num -> num.startsWith("-")));
         validateNegativeInput(lists.get(true));
-        return lists.get(false).stream().collect(summingInt(x -> Integer.valueOf(x)));
+        return lists.get(false).stream().mapToInt(Integer::valueOf).sum();
     }
 
-    private void validateNegativeInput(List<Integer> list) {
+    private void validateNegativeInput(List<String> list) {
         if (!list.isEmpty()) throw new IllegalArgumentException("Negative values : " + list);
     }
 
