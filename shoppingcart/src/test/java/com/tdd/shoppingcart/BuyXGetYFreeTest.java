@@ -19,15 +19,29 @@ public class BuyXGetYFreeTest {
         Assertions.assertEquals(4, buyXGetYFree.getPayableQuantity(5));
     }
 
-    @DisplayName(" Buy 1 then 1 free")
+//    @DisplayName(" Buy 1 then 1 free")
+//    @Test
+//    public void buy1Then1Free(){
+//        BuyXGetYFree buyXGetYFree = new BuyXGetYFree(1,1);
+//        Assertions.assertEquals(0, buyXGetYFree.getPayableQuantity(0));
+//        Assertions.assertEquals(1, buyXGetYFree.getPayableQuantity(1));
+//        Assertions.assertEquals(1, buyXGetYFree.getPayableQuantity(2));
+//        Assertions.assertEquals(2, buyXGetYFree.getPayableQuantity(3));
+//        Assertions.assertEquals(2, buyXGetYFree.getPayableQuantity(4));
+//    }
+
+    @DisplayName(" Buy 3 then 2 free")
     @Test
-    public void buy1Then1Free(){
-        BuyXGetYFree buyXGetYFree = new BuyXGetYFree(1,1);
+    public void buy2ThenGet50PercOff(){
+        BuyXGetYFree buyXGetYFree = new BuyXGetYFree(3,2);
         Assertions.assertEquals(0, buyXGetYFree.getPayableQuantity(0));
         Assertions.assertEquals(1, buyXGetYFree.getPayableQuantity(1));
-        Assertions.assertEquals(1, buyXGetYFree.getPayableQuantity(2));
-        Assertions.assertEquals(2, buyXGetYFree.getPayableQuantity(3));
-        Assertions.assertEquals(2, buyXGetYFree.getPayableQuantity(4));
+        Assertions.assertEquals(2, buyXGetYFree.getPayableQuantity(2));
+        Assertions.assertEquals(3, buyXGetYFree.getPayableQuantity(3));
+        Assertions.assertEquals(3, buyXGetYFree.getPayableQuantity(4));
+        Assertions.assertEquals(3, buyXGetYFree.getPayableQuantity(5));
+        Assertions.assertEquals(4, buyXGetYFree.getPayableQuantity(6));
+        Assertions.assertEquals(5, buyXGetYFree.getPayableQuantity(7));
     }
 
 }

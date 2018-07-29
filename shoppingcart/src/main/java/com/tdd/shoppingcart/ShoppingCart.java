@@ -23,7 +23,9 @@ public class ShoppingCart {
     }
 
     public double getTotalValue() {
-        return products.stream().mapToDouble(product -> getProductPriceWithOffer(product,offers.getOrDefault(product.productDetail,new NoOffer()))).sum();
+        return products.stream()
+                .mapToDouble(product -> getProductPriceWithOffer(product,offers.getOrDefault(product.productDetail,new NoOffer())))
+                .sum();
     }
 
     private double getProductPriceWithOffer(Product product, Offer offer) {

@@ -3,15 +3,20 @@ package com.tdd.shoppingcart.offer;
 public class BuyXGetYFree implements Offer {
 
     public final int purchasedQuantity;
-    public final int freeQuantity;
+    public final double freeQuantity;
 
-    public BuyXGetYFree(int purchasedQuantity, int freeQuantity) {
+    public BuyXGetYFree(int purchasedQuantity, double freeQuantity) {
         this.purchasedQuantity = purchasedQuantity;
         this.freeQuantity = freeQuantity;
     }
 
-    public int getPayableQuantity(int totalQuantity) {
-        int discountQuantity = (totalQuantity / (purchasedQuantity+ freeQuantity));
-        return totalQuantity - discountQuantity;
+    public double getPayableQuantity(int totalQuantity) {
+        if(totalQuantity == 1)
+            return totalQuantity;
+        int noOfElements = (int) (purchasedQuantity + freeQuantity);
+        int noOfGroups =  totalQuantity / noOfElements;
+        int freePerGroup = (noOfElements % purchasedQuantity );
+        int totalFreeQuantity = (noOfGroups * freePerGroup) + ((totalQuantity % noOfElements) % purchasedQuantity);
+        return totalQuantity - totalFreeQuantity;
     }
 }
